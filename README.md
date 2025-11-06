@@ -20,17 +20,76 @@ alphabet shifted cyclically to the left compared to the previous alphabet, corre
 ## ALGORITHM:
 
 STEP-1: Arrange the alphabets in row and column of a 26*26 matrix.
+
 STEP-2: Circulate the alphabets in each row to position left such that the first letter is attached to last.
+
 STEP-3: Repeat this process for all 26 rows and construct the final key matrix.
+
 STEP-4: The keyword and the plain text is read from the user.
+
 STEP-5: The characters in the keyword are repeated sequentially so as to match with that of the plain text.
+
 STEP-6: Pick the first letter of the plain text and that of the keyword as the row indices and column indices respectively.
+
 STEP-7: The junction character where these two meet forms the cipher character.
+
 STEP-8: Repeat the above steps to generate the entire cipher text.
 
 
 ## PROGRAM
-
+```
+#include <stdio.h>  
+#include <string.h>  
+#include <ctype.h>  
+void vigenereCipher(char *text, char *key, int decrypt)  
+{  
+    int len = strlen(text);  
+    int keyLen = strlen(key);  
+    for (int i = 0, j = 0; i < len; i++)  
+    {  
+        if (isalpha(text[i]))  
+        {  
+            int textOAset = isupper(text[i]) ? 'A' : 'a';  
+            int keyOAset = isupper(key[j % keyLen]) ? 'A' : 'a';  
+            int shift = key[j % keyLen] - keyOAset;  
+            if (decrypt)  
+            {  
+                shift = 26 - shift;  
+            }  
+            text[i] = textOAset + (text[i] - textOAset + shift) % 26;  
+            j++;  
+        }  
+    }  
+}  
+int main()  
+{  
+    char text[1000];  
+    char key[100];  
+    int choice;  
+    printf("Vigenère Cipher Implementation\n");  
+    printf("Enter plain text: ");  
+    fgets(text, sizeof(text), stdin);  
+    text[strcspn(text, "\n")] = 0;  
+    printf("Enter key: ");  
+    fgets(key, sizeof(key), stdin);  
+    key[strcspn(key, "\n")] = 0;  
+    for (int i = 0; key[i]; i++)  
+    {  
+        key[i] = toupper(key[i]);  
+    } 
+    char encrypted[1000];  
+    strcpy(encrypted, text);  
+    vigenereCipher(encrypted, key, 0);  
+    printf("\nEncrypted Message: %s\n", encrypted);  
+    char decrypted[1000];  
+    strcpy(decrypted, encrypted);  
+    vigenereCipher(decrypted, key, 1);  
+    printf("Decrypted Message: %s\n", decrypted);  
+    return 0;  
+} 
+```
 ## OUTPUT
+<img width="320" height="163" alt="image" src="https://github.com/user-attachments/assets/65cd74b4-2450-45a9-9668-4ffd9acb71a6" />
 
 ## RESULT
+Thus the implementation of vigenere cipher had been executed successfully.
